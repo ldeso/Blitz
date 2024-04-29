@@ -29,6 +29,8 @@ android {
         targetSdk = 35
         versionCode = 201
         versionName = "2.0.1"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunnerArguments["clearPackageData"] = "true"
 
         base {
             archivesName = "${applicationId}_$versionCode"
@@ -96,6 +98,10 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.window)
 
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
+
     testImplementation(kotlin("test"))
     testImplementation(libs.kotlinx.coroutines.test)
+
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
 }
