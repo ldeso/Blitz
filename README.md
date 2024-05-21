@@ -67,6 +67,30 @@ For example, an app installed from F-Droid can be updated to a newer version dow
 <details style="margin-bottom: 15px">
   <summary>Public key certificate fingerprint</summary>
   <pre><code>6d7fd2715ed21cff64086dc5fcf8820a685a793ebd07d972163d86172babba75</code></pre>
+  Public key certificate
+  <pre><code>-----BEGIN CERTIFICATE-----
+MIICpDCCAYwCAQEwDQYJKoZIhvcNAQELBQAwGDEWMBQGA1UEAwwNTMOpbyBkZSBT
+b3V6YTAeFw0yNDAyMjAxMTA2NTNaFw00OTAyMTMxMTA2NTNaMBgxFjAUBgNVBAMM
+DUzDqW8gZGUgU291emEwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCa
+ImZCJSq9GsvV3ce0GS5Rl4enTxCb9Kr9Cjen+9qyEo7XWS1FhLDTnQF5DQVDLw3a
+4jHQYXr03g7JEkOlgHrNnZgJmd2PbysRL4XbNsudcTCnQK2QcEziclt9GfOKzL38
+htVqtbdacpbuL3eqZRnWEXgz59pMJn/fHbAcegY7hylMwlHtTI1pHD4FxzD0wCnB
+QMGvDV33ZNHYDFtNP/oDNq4/G8ZQyf8jK3/0qZsCL0tXkSZhUYCgXtbTy9QCOC+P
+pPTcUG/f/iKLSI+ShnYdn8/qvaDEUFslYo+Lgodvz6xsWr7U6S4edaVEBFFZHwEQ
+PrilDrsBAxJvjAG31meXAgMBAAEwDQYJKoZIhvcNAQELBQADggEBACx2yW6ITgDT
+/Z2bdpWehlAgB1E7AUNxYvLCwke3h9A6MxSVxvN/y4B6PLxyV36ZbGS397hoyTOU
+9dhD0oj9B0LpVlt68DbZ3KZiDukGVWPrLTrBfGQ3Ry9GRenr8EtwYBwuVZIwJyl7
+5qJgIyc4WNPX4l+32X82t9VhLK5o5n4AFXbZa728j55WnP31MstxCGqG4FXNireA
+LAfH+OdlUlHT9iR99Ywqi8Keq50bPLQAlShxSU/Ikux+YrRjX8C0JGLXNfccHNw5
+lcQf5qiLfcdggujSYuFXkCRzBHEsBQrAuoc8wtzv9W7Z7e4LWHjs653zjE6vu6Nu
+iLUQO8x1AP8=
+-----END CERTIFICATE-----</code></pre>
+  This certificate can be displayed by saving it as "cert.pem" and running:
+  <pre><code>openssl x509 -in cert.pem -noout -text -nameopt utf8</code></pre>
+  Its fingerprint can be obtained with:
+  <pre><code>openssl x509 -in cert.pem -outform der | sha256sum</code></pre>
+  An APK can be verified manually by ensuring that this fingerprint is identical to the one output by apksigner:
+  <pre><code>apksigner verify --min-sdk-version 24 --print-certs net.leodesouza.blitz_187.apk</code></pre>
 </details>
 
 ## About
