@@ -5,7 +5,6 @@ package net.leodesouza.blitz.ui
 
 import android.content.Context
 import android.media.AudioManager
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -133,7 +132,6 @@ fun ClockScreen(
     Box(
         modifier = Modifier.clockInput(
             dragSensitivity = dragSensitivity,
-            interactionSource = remember { MutableInteractionSource() },
             clockStateProvider = { clockState },
             leaningSideProvider = { leaningSide },
             isBusyProvider = { isBusy },

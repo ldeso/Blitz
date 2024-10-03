@@ -11,6 +11,7 @@
 
 - Do not color text in red when there is still less than 100 ms left
 - Increase precision by not stopping the clock when switching players
+- Update dependencies
 
 ### Note
 

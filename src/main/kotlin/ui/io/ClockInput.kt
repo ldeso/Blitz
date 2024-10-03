@@ -8,7 +8,6 @@ import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
@@ -26,7 +25,6 @@ import net.leodesouza.blitz.ui.models.ClockState
  * Modifier to control the chess clock through click events, dragging events and key presses.
  *
  * @param[dragSensitivity] How many minutes or seconds to add per dragged pixel.
- * @param[interactionSource] Mutable interaction source used to dispatch click events.
  * @param[clockStateProvider] Lambda for the current state of the clock.
  * @param[leaningSideProvider] Lambda for which side the device is currently leaning towards.
  * @param[isBusyProvider] Lambda for whether the clock is currently busy.
@@ -39,7 +37,6 @@ import net.leodesouza.blitz.ui.models.ClockState
  */
 fun Modifier.clockInput(
     dragSensitivity: Float,
-    interactionSource: MutableInteractionSource,
     clockStateProvider: () -> ClockState,
     leaningSideProvider: () -> LeaningSide,
     isBusyProvider: () -> Boolean,
@@ -49,76 +46,74 @@ fun Modifier.clockInput(
     play: () -> Unit,
     save: () -> Unit,
     restore: (addMinutes: Float, addSeconds: Float) -> Unit,
-): Modifier = then(
-    clickable(interactionSource = interactionSource, indication = null) {
-        onClickEvent(
+): Modifier = clickable(interactionSource = null, indication = null) {
+    onClickEvent(
+        clockState = clockStateProvider(),
+        isBusy = isBusyProvider(),
+        start = start,
+        play = play,
+    )
+}
+    .onKeyEvent {
+        onKeyEvent(
+            keyEvent = it,
             clockState = clockStateProvider(),
+            layoutDirection = layoutDirection,
             isBusy = isBusyProvider(),
-            start = start,
-            play = play,
+            save = save,
+            restore = restore,
         )
     }
-        .onKeyEvent {
-            onKeyEvent(
-                keyEvent = it,
-                clockState = clockStateProvider(),
-                layoutDirection = layoutDirection,
-                isBusy = isBusyProvider(),
-                save = save,
-                restore = restore,
-            )
-        }
-        .pointerInput(Unit) {
-            detectHorizontalDragGestures(
-                onDragStart = {
-                    onDragStart(
-                        clockState = clockStateProvider(), isBusy = isBusyProvider(), save = save,
-                    )
-                },
-                onDragEnd = {
-                    onDragEnd(
-                        clockState = clockStateProvider(), isBusy = isBusyProvider(), play = play,
-                    )
-                },
-                onHorizontalDrag = { _: PointerInputChange, dragAmount: Float ->
-                    onHorizontalDrag(
-                        addAmount = dragSensitivity * dragAmount,
-                        clockState = clockStateProvider(),
-                        leaningSide = leaningSideProvider(),
-                        displayOrientation = displayOrientation,
-                        layoutDirection = layoutDirection,
-                        isBusy = isBusyProvider(),
-                        restore = restore,
-                    )
-                },
-            )
-        }
-        .pointerInput(Unit) {
-            detectVerticalDragGestures(
-                onDragStart = {
-                    onDragStart(
-                        clockState = clockStateProvider(), isBusy = isBusyProvider(), save = save,
-                    )
-                },
-                onDragEnd = {
-                    onDragEnd(
-                        clockState = clockStateProvider(), isBusy = isBusyProvider(), play = play,
-                    )
-                },
-                onVerticalDrag = { _: PointerInputChange, dragAmount: Float ->
-                    onVerticalDrag(
-                        addAmount = dragSensitivity * dragAmount,
-                        clockState = clockStateProvider(),
-                        leaningSide = leaningSideProvider(),
-                        displayOrientation = displayOrientation,
-                        layoutDirection = layoutDirection,
-                        isBusy = isBusyProvider(),
-                        restore = restore,
-                    )
-                },
-            )
-        },
-)
+    .pointerInput(Unit) {
+        detectHorizontalDragGestures(
+            onDragStart = {
+                onDragStart(
+                    clockState = clockStateProvider(), isBusy = isBusyProvider(), save = save,
+                )
+            },
+            onDragEnd = {
+                onDragEnd(
+                    clockState = clockStateProvider(), isBusy = isBusyProvider(), play = play,
+                )
+            },
+            onHorizontalDrag = { _: PointerInputChange, dragAmount: Float ->
+                onHorizontalDrag(
+                    addAmount = dragSensitivity * dragAmount,
+                    clockState = clockStateProvider(),
+                    leaningSide = leaningSideProvider(),
+                    displayOrientation = displayOrientation,
+                    layoutDirection = layoutDirection,
+                    isBusy = isBusyProvider(),
+                    restore = restore,
+                )
+            },
+        )
+    }
+    .pointerInput(Unit) {
+        detectVerticalDragGestures(
+            onDragStart = {
+                onDragStart(
+                    clockState = clockStateProvider(), isBusy = isBusyProvider(), save = save,
+                )
+            },
+            onDragEnd = {
+                onDragEnd(
+                    clockState = clockStateProvider(), isBusy = isBusyProvider(), play = play,
+                )
+            },
+            onVerticalDrag = { _: PointerInputChange, dragAmount: Float ->
+                onVerticalDrag(
+                    addAmount = dragSensitivity * dragAmount,
+                    clockState = clockStateProvider(),
+                    leaningSide = leaningSideProvider(),
+                    displayOrientation = displayOrientation,
+                    layoutDirection = layoutDirection,
+                    isBusy = isBusyProvider(),
+                    restore = restore,
+                )
+            },
+        )
+    }
 
 /**
  * Start the clock or switch to the next player on click events.
